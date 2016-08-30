@@ -22,19 +22,43 @@ var cocktailIngredients = new Ingredients([
 	["Olive on a stick", "Salt-dusted rim", "Rasher of bacon"],
 	["Shake of bitters", "Splash of tonic", "Twist of lemon peel"],
 	["Sugar cube", "Spoonful of honey", "Splash of cola"],
-	["Slice of orange", "Dash of cassis", "Cherry on top"]
+	["Slice of orange", "Dash of cassis", "Cherry on top"],
+	["Have an orange with ye drink"]
 	]);
 
-function createRandom(array){
-	var randomize = array[Math.floor(Math.random() * array.length)];
-	return randomize
-}
+console.log(cocktailIngredients.ingredients[3][1])
 
 function showQuestion(cocktailQuestion){
 	var currentQuestion = cocktailQuestion.question[currentQuestionIndex];
 	$(".question").html(currentQuestion);
 }
 showQuestion(cocktailQuestion);
+
+function createRandom(array){
+	var randomize = array[Math.floor(Math.random() * array.length)];
+	return randomize
+}
+
+function drinkName(){
+	var adjective = ["Salty", "Drunken", "Golden", "Dead",];
+	var noun = ["Dog", "Scallywag", "Clipper", "Gibbet", "Jackstaff", "Land-Lubber"];
+	var randomAdjective = createRandom(adjective);
+	var randomNoun = createRandom(noun);
+	var cocktailName = randomAdjective + " " + randomNoun;
+	return cocktailName;
+}
+
+function displayDrink(){
+	var drink = drinkName();
+	$(".drink-mix").html("Here's a " + "<span class='drink-name'>\"" + drink + "\"</span>" + " for Ye!");
+};
+
+function haveAnother(){
+	$(".another").click(function(){
+		currentQuestionIndex = 0;
+		showQuestion(cocktailQuestion);
+	});
+}
 
 
 var yeaClick = 0;
@@ -47,9 +71,14 @@ $(document).ready(function(){
 		if(currentQuestionIndex < cocktailQuestion.question.length){
 			showQuestion(cocktailQuestion);
 		};
+		if(currentQuestionIndex === cocktailQuestion.question.length){
+			$(".questions").hide();
+			displayDrink();
+			$(".another").show();
+		};
 	});
 
-	$(".yea").click(function(){
+	$(".yea").click(function(event){
 		yeaClick++
 		console.log("yeaClick" + yeaClick);
 	});
