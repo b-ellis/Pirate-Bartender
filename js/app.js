@@ -6,82 +6,48 @@
 */
 
 
-var Questions = function(question){
+var Question = function(question){
 	this.question = question
 }
 
-var strongQuestion = new Questions("Do ye like yer drinks strong?");
-var saltyQuestion = new Questions("Do ye like it with a salty tang?");
-var bitterQuestion = new Questions("Are ye a lubber who likes it bitter?");
-var sweetQuestion = new Questions("Would ye like a bit of sweetness with yer poison?");
-var fruityQuestion = new Questions("Are ye one for a fruity finish?");
-var scurvyQuestion = new Questions("Do ye have scurvy?");
+var strongQuestion = new Question("Do ye like yer drinks strong?");
+var saltyQuestion = new Question("Do ye like it with a salty tang?");
+var bitterQuestion = new Question("Are ye a lubber who likes it bitter?");
+var sweetQuestion = new Question("Would ye like a bit of sweetness with yer poison?");
+var fruityQuestion = new Question("Are ye one for a fruity finish?");
+var scurvyQuestion = new Question("Do ye have scurvy?");
+
 var cocktailQuestion = [strongQuestion, saltyQuestion, bitterQuestion, sweetQuestion, fruityQuestion, scurvyQuestion];
 
-var Pantry = function(first, second, third, fourth, fifth, sixth){
-	this.first = first,
-	this.second = second,
-	this.third = third,
-	this.fourth = fourth,
-	this.fifth = fifth,
-	this.sixth = sixth
+var Pantry = function(pantryArray) {
+	this.pantryArray = pantryArray;
 }
 
-var cocktailIngredients = new Pantry(
-	["Glug of Rum", "slug of Whisky", "Splash of Gin"], 
-	["Olive on a stick", "Salt-dusted rim", "Rasher of bacon"], 
-	["Shake of bitters", "Splash of tonic", "Twist of lemon peel"], 
-	["Sugar cube", "Spoonful of honey", "Splash of cola"], 
-	["Slice of orange", "Dash of cassis", "Cherry on top"], 
+var cocktailIngredients = new Pantry([
+	["Glug of Rum", "slug of Whisky", "Splash of Gin"],
+	["Olive on a stick", "Salt-dusted rim", "Rasher of bacon"],
+	["Shake of bitters", "Splash of tonic", "Twist of lemon peel"],
+	["Sugar cube", "Spoonful of honey", "Splash of cola"],
+	["Slice of orange", "Dash of cassis", "Cherry on top"],
 	["Have an orange with ye drink"]
-);
+]);
 
 var currentQuestionIndex = 0;
 
-var userPreferences = {
-	first: "",
-	second: "",
-	third: "",
-	fourth: "",
-	fifth: "",
-	sixth: "",
+var userPreferences = [];
+
+var Bartender = function(name) {
+	this.name = name;
 }
 
-var Bartender = function(){}
-
-Bartender.prototype.createDrink = function(){
-	var yea = $(".yea").on("click");
-	if(strongQuestion.question = yea){
-		userPreferences.first = cocktailIngredients.first;
-		var randomStrong = createRandom(userPreferences.first);
-		showIngredients(randomStrong);
-	};
-	if(saltyQuestion = yea){
-		userPreferences.second = cocktailIngredients.second;
-		var randomSalty = createRandom(userPreferences.second);
-		showIngredients(randomSalty);
-	};
-	if(bitterQuestion = yea){
-		userPreferences.third = cocktailIngredients.third;
-		var randomBitter = createRandom(userPreferences.third);
-		showIngredients(randomBitter);
-	};
-	if(sweetQuestion = yea){
-		userPreferences.fourth = cocktailIngredients.fourth;
-		var randomSweet = createRandom(userPreferences.fourth);
-		showIngredients(randomSweet);
-	};
-	if(fruityQuestion = yea){
-		userPreferences.fifth = cocktailIngredients.fifth;
-		var randomFruity = createRandom(userPreferences.fifth);
-		showIngredients(randomFruity);
-	};
-	if(scurvyQuestion = yea){
-		userPreferences.sixth = cocktailIngredients.sixth;
-		var randomScurvy = createRandom(userPreferences.sixth);
-		showIngredients(randomScurvy);
-	};
-};
+Bartender.prototype.createDrink = function() {
+	for (var i = 0 ; i < userPreferences.length ; i++) {
+		if (userPreferences[i] === 'yea') {
+				var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]);
+				showIngredients(randomIngredient);
+		}
+	}
+}
 
 function showQuestion(){
 	var currentQuestion = cocktailQuestion[currentQuestionIndex].question;
@@ -118,24 +84,32 @@ function haveAnother(){
 	$(".questions").show();
 }
 
+var bartender = new Bartender("Bradley");
+
 $(document).ready(function(){
-	
+
 	showQuestion();
 
-	$("button").on("click", function(){
-		currentQuestionIndex++
+	$("button").on("click", function() {
+		var answer = $(this).attr("class");
+		userPreferences.push(answer);
+
+		currentQuestionIndex++;
 		$(".question").html("");
-		if(currentQuestionIndex < cocktailQuestion.length){
+		if(currentQuestionIndex < cocktailQuestion.length) {
 			showQuestion();
-		};
-		if(currentQuestionIndex === cocktailQuestion.length){
+		}
+
+		if(currentQuestionIndex === cocktailQuestion.length) {
 			$(".questions").hide();
 			displayDrink();
-			Bartender.prototype.createDrink();
+			bartender.createDrink();
 			$(".another").show();
-		};
+		}
 	});
+
 	$(".another").click(function(){
 		haveAnother();
 	});
-})
+
+});
