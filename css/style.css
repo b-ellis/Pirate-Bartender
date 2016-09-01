@@ -14,6 +14,7 @@ button{
 	font-size: 1.5em;
 	font-family: windlass;
 	border-radius: .5em;
+	padding: 5px;
 }
 button:focus{
 	outline: none;
@@ -27,4 +28,12 @@ button:focus{
 }
 .another{
 	display: none;
+}
+.drink-ingredients{
+	list-style: none;
+	padding-left: 0px;
+}
+.drink-ingredients li{
+	padding: 5px;
+	text-align: center;
 }

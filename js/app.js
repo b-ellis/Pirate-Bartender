@@ -1,42 +1,100 @@
+/* 1) fix the question/ingredient constructors
+	2) define an array of user answers
+	3) when user is done with answering, go through all answers and depending on each answer, decide whether u will use the corresponding ingredient object
+	4) draw a random ingredient from the object
+	5) construct a drink object from all ingredients u randomly chose  this logic should be inside the newDrink function for the Bartender
+*/
+
+
 var Questions = function(question){
 	this.question = question
 }
 
-var cocktailQuestion = new Questions([
-	"Do ye like yer drinks strong?", 
-	"Do ye like it with a salty tang?",
-	"Are ye a lubber who likes it bitter?",
-	"Would ye like a bit of sweetness with yer poison?",
-	"Are ye one for a fruity finish?", 
-	"Do ye have scurvy?"
-	]);
+var strongQuestion = new Questions("Do ye like yer drinks strong?");
+var saltyQuestion = new Questions("Do ye like it with a salty tang?");
+var bitterQuestion = new Questions("Are ye a lubber who likes it bitter?");
+var sweetQuestion = new Questions("Would ye like a bit of sweetness with yer poison?");
+var fruityQuestion = new Questions("Are ye one for a fruity finish?");
+var scurvyQuestion = new Questions("Do ye have scurvy?");
+var cocktailQuestion = [strongQuestion, saltyQuestion, bitterQuestion, sweetQuestion, fruityQuestion, scurvyQuestion];
+
+var Pantry = function(first, second, third, fourth, fifth, sixth){
+	this.first = first,
+	this.second = second,
+	this.third = third,
+	this.fourth = fourth,
+	this.fifth = fifth,
+	this.sixth = sixth
+}
+
+var cocktailIngredients = new Pantry(
+	["Glug of Rum", "slug of Whisky", "Splash of Gin"], 
+	["Olive on a stick", "Salt-dusted rim", "Rasher of bacon"], 
+	["Shake of bitters", "Splash of tonic", "Twist of lemon peel"], 
+	["Sugar cube", "Spoonful of honey", "Splash of cola"], 
+	["Slice of orange", "Dash of cassis", "Cherry on top"], 
+	["Have an orange with ye drink"]
+);
 
 var currentQuestionIndex = 0;
 
-var Ingredients = function(ingredients){
-	this.ingredients = ingredients
+var userPreferences = {
+	first: "",
+	second: "",
+	third: "",
+	fourth: "",
+	fifth: "",
+	sixth: "",
 }
 
-var cocktailIngredients = new Ingredients([
-	["Glug of Rum", "slug of Whisky", "Splash of Gin"],
-	["Olive on a stick", "Salt-dusted rim", "Rasher of bacon"],
-	["Shake of bitters", "Splash of tonic", "Twist of lemon peel"],
-	["Sugar cube", "Spoonful of honey", "Splash of cola"],
-	["Slice of orange", "Dash of cassis", "Cherry on top"],
-	["Have an orange with ye drink"]
-	]);
+var Bartender = function(){}
 
-console.log(cocktailIngredients.ingredients[3][1])
+Bartender.prototype.createDrink = function(){
+	var yea = $(".yea").on("click");
+	if(strongQuestion.question = yea){
+		userPreferences.first = cocktailIngredients.first;
+		var randomStrong = createRandom(userPreferences.first);
+		showIngredients(randomStrong);
+	};
+	if(saltyQuestion = yea){
+		userPreferences.second = cocktailIngredients.second;
+		var randomSalty = createRandom(userPreferences.second);
+		showIngredients(randomSalty);
+	};
+	if(bitterQuestion = yea){
+		userPreferences.third = cocktailIngredients.third;
+		var randomBitter = createRandom(userPreferences.third);
+		showIngredients(randomBitter);
+	};
+	if(sweetQuestion = yea){
+		userPreferences.fourth = cocktailIngredients.fourth;
+		var randomSweet = createRandom(userPreferences.fourth);
+		showIngredients(randomSweet);
+	};
+	if(fruityQuestion = yea){
+		userPreferences.fifth = cocktailIngredients.fifth;
+		var randomFruity = createRandom(userPreferences.fifth);
+		showIngredients(randomFruity);
+	};
+	if(scurvyQuestion = yea){
+		userPreferences.sixth = cocktailIngredients.sixth;
+		var randomScurvy = createRandom(userPreferences.sixth);
+		showIngredients(randomScurvy);
+	};
+};
 
-function showQuestion(cocktailQuestion){
-	var currentQuestion = cocktailQuestion.question[currentQuestionIndex];
+function showQuestion(){
+	var currentQuestion = cocktailQuestion[currentQuestionIndex].question;
 	$(".question").html(currentQuestion);
 }
-showQuestion(cocktailQuestion);
 
 function createRandom(array){
 	var randomize = array[Math.floor(Math.random() * array.length)];
 	return randomize
+}
+
+function showIngredients(string){
+	$(".drink-ingredients").append("<li>" +string+ "</li>")
 }
 
 function drinkName(){
@@ -54,36 +112,30 @@ function displayDrink(){
 };
 
 function haveAnother(){
-	$(".another").click(function(){
-		currentQuestionIndex = 0;
-		showQuestion(cocktailQuestion);
-	});
+	currentQuestionIndex = 0;
+	$(".drink").remove();
+	showQuestion();
+	$(".questions").show();
 }
 
-
-var yeaClick = 0;
-var nayClick = 0;
-
 $(document).ready(function(){
-	$("button").click(function(){
+	
+	showQuestion();
+
+	$("button").on("click", function(){
 		currentQuestionIndex++
 		$(".question").html("");
-		if(currentQuestionIndex < cocktailQuestion.question.length){
-			showQuestion(cocktailQuestion);
+		if(currentQuestionIndex < cocktailQuestion.length){
+			showQuestion();
 		};
-		if(currentQuestionIndex === cocktailQuestion.question.length){
+		if(currentQuestionIndex === cocktailQuestion.length){
 			$(".questions").hide();
 			displayDrink();
+			Bartender.prototype.createDrink();
 			$(".another").show();
 		};
 	});
-
-	$(".yea").click(function(event){
-		yeaClick++
-		console.log("yeaClick" + yeaClick);
-	});
-	$(".nay").click(function(){
-		nayClick++
-		console.log("nayClick" + nayClick);
+	$(".another").click(function(){
+		haveAnother();
 	});
 })
