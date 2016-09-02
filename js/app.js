@@ -1,11 +1,3 @@
-/* 1) fix the question/ingredient constructors
-	2) define an array of user answers
-	3) when user is done with answering, go through all answers and depending on each answer, decide whether u will use the corresponding ingredient object
-	4) draw a random ingredient from the object
-	5) construct a drink object from all ingredients u randomly chose  this logic should be inside the newDrink function for the Bartender
-*/
-
-
 var Question = function(question){
 	this.question = question
 }
@@ -42,9 +34,9 @@ var Bartender = function(name) {
 
 Bartender.prototype.createDrink = function() {
 	for (var i = 0 ; i < userPreferences.length ; i++) {
-		if (userPreferences[i] === 'yea') {
-				var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]);
-				showIngredients(randomIngredient);
+		if (userPreferences[i] === 'yea') {													//marks yea click
+				var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]);	//takes the cocktailIngredients array and takes a random ingredient
+				showIngredients(randomIngredient);											//shows ingredients for the question with a yea click
 		}
 	}
 }
@@ -55,7 +47,7 @@ function showQuestion(){
 }
 
 function createRandom(array){
-	var randomize = array[Math.floor(Math.random() * array.length)];
+	var randomize = array[Math.floor(Math.random() * array.length)];						//give a random position within an array
 	return randomize
 }
 
@@ -65,7 +57,7 @@ function showIngredients(string){
 
 function drinkName(){
 	var adjective = ["Salty", "Drunken", "Golden", "Dead",];
-	var noun = ["Dog", "Scallywag", "Clipper", "Gibbet", "Jackstaff", "Land-Lubber"];
+	var noun = ["Dog", "Scallywag", "Clipper", "Gibbet", "Jackstaff", "Land-Lubber"];		//spits out random drink name
 	var randomAdjective = createRandom(adjective);
 	var randomNoun = createRandom(noun);
 	var cocktailName = randomAdjective + " " + randomNoun;
@@ -79,36 +71,38 @@ function displayDrink(){
 
 function haveAnother(){
 	currentQuestionIndex = 0;
-	$(".drink").remove();
-	showQuestion();
-	$(".questions").show();
+	userPreferences = [];
+	$(".drink").remove();  											// removing the entire DOM, 
+	showQuestion();													// trying to get just remove the html elements within .drink
+	$(".questions-container").show();
 }
 
-var bartender = new Bartender("Bradley");
+var bartender = new Bartender("BlackBeard");
 
 $(document).ready(function(){
 
 	showQuestion();
 
-	$("button").on("click", function() {
-		var answer = $(this).attr("class");
+	$("button").on("click", function() {			
+		var answer = $(this).attr("class");							//records which button is clicked
 		userPreferences.push(answer);
 
 		currentQuestionIndex++;
 		$(".question").html("");
-		if(currentQuestionIndex < cocktailQuestion.length) {
+		if(currentQuestionIndex < cocktailQuestion.length) { 		//displays question 
 			showQuestion();
 		}
 
-		if(currentQuestionIndex === cocktailQuestion.length) {
-			$(".questions").hide();
+		if(currentQuestionIndex === cocktailQuestion.length) {		//at the end of the question array
+			$(".questions-container").hide();						//will display your drink and ask for another
+			$(".drink").show();
 			displayDrink();
 			bartender.createDrink();
 			$(".another").show();
 		}
 	});
 
-	$(".another").click(function(){
+	$(".another").click(function(){									//restarts the questions
 		haveAnother();
 	});
 
