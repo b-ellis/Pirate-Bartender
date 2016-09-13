@@ -46,8 +46,15 @@
 
 	"use strict";
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
 	var $ = __webpack_require__(1);
+	
 	var Question = function Question(question) {
+		_classCallCheck(this, Question);
+	
 		this.question = question;
 	};
 	
@@ -61,6 +68,8 @@
 	var cocktailQuestion = [strongQuestion, saltyQuestion, bitterQuestion, sweetQuestion, fruityQuestion, scurvyQuestion];
 	
 	var Pantry = function Pantry(pantryArray) {
+		_classCallCheck(this, Pantry);
+	
 		this.pantryArray = pantryArray;
 	};
 	
@@ -70,19 +79,28 @@
 	
 	var userPreferences = [];
 	
-	var Bartender = function Bartender(name) {
-		this.name = name;
-	};
+	var Bartender = function () {
+		function Bartender(name) {
+			_classCallCheck(this, Bartender);
 	
-	Bartender.prototype.createDrink = function () {
-		for (var i = 0; i < userPreferences.length; i++) {
-			if (userPreferences[i] === 'yea') {
-				//marks yea click
-				var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]); //takes the cocktailIngredients array and takes a random ingredient
-				showIngredients(randomIngredient); //shows ingredients for the question with a yea click
-			}
+			this.name = name;
 		}
-	};
+	
+		_createClass(Bartender, [{
+			key: "createDrink",
+			value: function createDrink() {
+				for (var i = 0; i < userPreferences.length; i++) {
+					if (userPreferences[i] === 'yea') {
+						//marks yea click
+						var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]); //takes the cocktailIngredients array and takes a random ingredient
+						showIngredients(randomIngredient); //shows ingredients for the question with a yea click
+					}
+				}
+			}
+		}]);
+	
+		return Bartender;
+	}();
 	
 	function showQuestion() {
 		var currentQuestion = cocktailQuestion[currentQuestionIndex].question;

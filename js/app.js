@@ -1,6 +1,8 @@
 var $ = require('jquery');
-var Question = function(question){
-	this.question = question
+class Question {
+	constructor(question) {
+		this.question = question
+	}
 }
 
 var strongQuestion = new Question("Do ye like yer drinks strong?");
@@ -12,8 +14,10 @@ var scurvyQuestion = new Question("Do ye have scurvy?");
 
 var cocktailQuestion = [strongQuestion, saltyQuestion, bitterQuestion, sweetQuestion, fruityQuestion, scurvyQuestion];
 
-var Pantry = function(pantryArray) {
-	this.pantryArray = pantryArray;
+class Pantry {
+  constructor(pantryArray) {
+    this.pantryArray = pantryArray;
+  }
 }
 
 var cocktailIngredients = new Pantry([
@@ -29,34 +33,36 @@ var currentQuestionIndex = 0;
 
 var userPreferences = [];
 
-var Bartender = function(name) {
-	this.name = name;
-}
+class Bartender {
+	constructor(name) {
+		this.name = name
+	}
 
-Bartender.prototype.createDrink = function() {
-	for (var i = 0 ; i < userPreferences.length ; i++) {
-		if (userPreferences[i] === 'yea') {													//marks yea click
+	createDrink() {
+		for (var i = 0 ; i < userPreferences.length ; i++) {
+			if (userPreferences[i] === 'yea') {												//marks yea click
 				var randomIngredient = createRandom(cocktailIngredients.pantryArray[i]);	//takes the cocktailIngredients array and takes a random ingredient
 				showIngredients(randomIngredient);											//shows ingredients for the question with a yea click
+			}
 		}
-	}
+	}	
 }
 
-function showQuestion(){
+function showQuestion() {
 	var currentQuestion = cocktailQuestion[currentQuestionIndex].question;
 	$(".question").html(currentQuestion);
 }
 
-function createRandom(array){
+function createRandom(array) {
 	var randomize = array[Math.floor(Math.random() * array.length)];						//give a random position within an array
 	return randomize
 }
 
-function showIngredients(string){
+function showIngredients(string) {
 	$(".drink-ingredients").append("<li>" +string+ "</li>")
 }
 
-function drinkName(){
+function drinkName() {
 	var adjective = ["Salty", "Drunken", "Golden", "Dead",];
 	var noun = ["Dog", "Scallywag", "Clipper", "Gibbet", "Jackstaff", "Land-Lubber"];		//spits out random drink name
 	var randomAdjective = createRandom(adjective);
@@ -65,12 +71,12 @@ function drinkName(){
 	return cocktailName;
 }
 
-function displayDrink(){
+function displayDrink() {
 	var drink = drinkName();
 	$(".drink-mix").html("Here's a " + "<span class='drink-name'>\"" + drink + "\"</span>" + " for Ye!");
 };
 
-function haveAnother(){
+function haveAnother() {
 	currentQuestionIndex = 0;
 	userPreferences = [];
 	$(".drink-mix").empty();										//resets questions and gets rid of
@@ -82,7 +88,7 @@ function haveAnother(){
 
 var bartender = new Bartender("BlackBeard");
 
-$(document).ready(function(){
+$(document).ready(function() {
 
 	showQuestion();
 
@@ -105,7 +111,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$(".another").click(function(){									//restarts the questions
+	$(".another").click(function() {									//restarts the questions
 		haveAnother();
 	});
 
