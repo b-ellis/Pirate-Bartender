@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var Question = function(question){
 	this.question = question
 }
@@ -72,8 +73,10 @@ function displayDrink(){
 function haveAnother(){
 	currentQuestionIndex = 0;
 	userPreferences = [];
-	$(".drink").remove();  											// removing the entire DOM, 
-	showQuestion();													// trying to get just remove the html elements within .drink
+	$(".drink-mix").empty();										//resets questions and gets rid of
+	$(".drink-ingredients").empty();								//drink name and drink ingredients
+	$(".another").hide();
+	showQuestion();													
 	$(".questions-container").show();
 }
 
